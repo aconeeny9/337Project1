@@ -2,7 +2,9 @@
 <b>CS 337 Project 1: Tweet Mining &amp; The Golden Globes
 
 Team Members: Abigail Coneeny, Rachel Kantor, Ran Sa
+
 Due Date: 31 October 2021
+
 
 Project Descripion (CANVAS):
 
