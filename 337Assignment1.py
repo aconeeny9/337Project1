@@ -96,15 +96,18 @@ for tweet in data:
             if word in tweet['text']:
                 winners.append(tweet['text']) """
 
-keys = dict(sorted(host.items(), key=lambda item: item[1], reverse = True)).keys()
-values = dict(sorted(host.items(), key=lambda item: item[1], reverse = True))
-hosts = ""
-for ind, i in enumerate(keys):
-    if i in keys[ind + 1]:
-        hosts = values[keys[ind+1]]
-    else:
-        break
-print(hosts)
+def compress_best_of_dict(aDictionary):
+    keys = list(dict(sorted(aDictionary.items(), key=lambda item: item[1], reverse = True)).keys())
+    hosts = ""
+    for ind, i in enumerate(keys):
+        if i in keys[ind + 1]:
+            hosts = keys[ind+1]
+        else:
+            break
+    print(hosts)
+
+compress_best_of_dict(host)
+
 '''print(i)
 if ind >= 20:
     break'''
