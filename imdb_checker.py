@@ -2,24 +2,23 @@ import pickle
 
 with open('imdb_data.pkl', 'rb') as data_file:
     imdb_data = pickle.load(data_file)
-actor_dic, actress_dic, director_dic, title_dic = imdb_data
+actor, actress, director, person, title = imdb_data
 
 
 def is_imdb_actor(name):
-    char = name.lower()[0]
-    return name in actor_dic[char]
+    return name in actor
 
 
 def is_imdb_actress(name):
-    char = name.lower()[0]
-    return name in actress_dic[char]
+    return name in actress
 
 
 def is_imdb_director(name):
-    char = name.lower()[0]
-    return name in director_dic[char]
+    return name in director
+
+def is_imdb_person(name):
+    return name in person
 
 
 def is_imdb_title(name):
-    char = name.lower()[0]
-    return name in title_dic[char]
+    return name in title
