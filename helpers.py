@@ -69,23 +69,30 @@ def compress_best(aDictionary):
     string = ""
     val = 0
     stop_ind = 0
+    jumped = False
     for ind, i in enumerate(keys):
-        if ind < len(keys) - 1 and i in keys[ind + 1]:
-            string = keys[ind+1]
-            if ind == 0:
-                val = aDictionary[string] + aDictionary[i]
-            else:
+        if stop_ind <= ind:
+            if ind < len(keys) - 1 and i in keys[ind + 1]:
+                string = keys[ind+1]
+                if ind == 0:
+                    val = aDictionary[string] + aDictionary[i]
+                else:
+                    val += aDictionary[string]
+                stop_ind = ind+1
+            elif ind < len(keys) - 1 and keys[ind+1] in i:
+                string = i
+                if ind == 0:
+                    val = aDictionary[keys[ind+1]] + aDictionary[i]
+                else:
+                    val += aDictionary[string]
+                stop_ind = ind+2
+            elif ind < len(keys) - 2 and i in keys[ind+2] and not jumped:
+                string = keys[ind+2]
                 val += aDictionary[string]
-            stop_ind = ind+1
-        elif ind < len(keys) - 1 and keys[ind+1] in i:
-            string = i
-            if ind == 0:
-                val = aDictionary[keys[ind+1]] + aDictionary[i]
+                stop_ind = ind+2
+                jumped = True
             else:
-                val += aDictionary[string]
-            stop_ind = ind+2
-        else:
-            break
+                break
     new_dict = {string:val}
     for ind, i in enumerate(keys):
         if ind > stop_ind:
