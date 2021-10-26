@@ -28,7 +28,7 @@ winnerKeywords = ["won", "wins"]
 badKeywords = ["predict", "think", "thought", "bet", "guess", "wish", "knew", "know", "should"]
 filterKeywords = ["Globes", "Golden", "Golden Globes", "#GoldenGlobes", "RT:", "goldenglobes"]
 punctuation = ['\'',',',';','"',':','!','?',')','(',']','[','}','{','#']
-replacements = [(" or ", "/"), ("Television","TV"),(" at "," "), ("in a ", " ")]
+replacements = [(" or ", "/"), ("Television","TV"),(" at "," ")]#, ("in a ", " ")]
 
 for tweet in data:
     goodTweet = True
