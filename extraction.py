@@ -1,6 +1,9 @@
 import util
 from Host import Host
 from Awards_temp import Awards
+from Winner import Winner
+import imdb_checker
+import json
 
 # please add any bad keywords here
 blacklist_keywords = [
@@ -12,31 +15,42 @@ blacklist_keywords = [
 whitelist_keywords = [
     ["host", ["host", "hosts", "hosting", "hosted"]],
     ['best', ['Best']],
-    ["win", ['win', 'wins', 'won']],
-    ['go to', ['go to', 'goes to', 'went to']],
-    ['nominate', ["nominate", "nominee"]]
+    ["win", ['wins']],
+    ['winner', ['winner']],
+    ['go to', ['goes to']],
+    ['nominate', ["nominate", "nominee"]],
+    ['cecil', ['Cecil B']]
 ]
 host_scanner = Host()
 awards_scanner = Awards()
+winner_scanner = Winner()
 
 
-def tweet_extraction(year):
+def tweet_extraction(year, award_list):
+    imdb_checker.load_dataset(year)
+    winner_scanner.set_awards(award_list)
     # load tweet from csv
-    tweets = util.load_data('gg{}.json'.format(year))
-    # iterate through all the tweets and extract information from them
-    lent = len(tweets)
-    for index, tweet in enumerate(tweets):
-        # check if the tweet contain any bad keywords
-        if util.keyword_matcher(blacklist_keywords, tweet)[0]:
-            continue
-        # check if the tweet contain any good keywords
-        contain_keyword, match_list = util.keyword_matcher(whitelist_keywords, tweet)
-        if contain_keyword:
-            match_dic = util.merge_matches(match_list)
-            host_scanner.scanner_dispatch(match_dic, tweet)
-            awards_scanner.scanner_dispatch(match_dic, tweet)
+    path = 'gg{}.json'.format(year)
+    with open(path, 'r', encoding='utf-8') as data_file:
+        data = json.load(data_file)
+        # iterate through all the tweets and extract information from them
+        for index, tweet in enumerate(data):
+            #if index % 10000 == 0:
+                #print(index)
+            tweet = tweet['text']
+            # check if the tweet contain any bad keywords
+            if util.keyword_matcher(blacklist_keywords, tweet)[0]:
+                continue
+            # check if the tweet contain any good keywords
+            contain_keyword, match_list = util.keyword_matcher(whitelist_keywords, tweet)
+            if contain_keyword:
+                match_dic = util.merge_matches(match_list)
+                host_scanner.scanner_dispatch(match_dic, tweet)
+                awards_scanner.scanner_dispatch(match_dic, tweet)
+                winner_scanner.scanner_dispatch(match_dic, tweet)
     host_scanner.evaluate()
     awards_scanner.evaluate()
+    winner_scanner.evaluate()
     print(host_scanner.to_string())
     util.write_json([host_scanner], 'gg2013.json')
 
@@ -49,5 +63,32 @@ def get_award():
     return awards_scanner.awards_list
 
 
+def get_winner():
+    return winner_scanner.winner
+
+
 if __name__ == '__main__':
-    tweet_extraction(2013)
+    OFFICIAL_AWARDS_1315 = ['cecil b. demille award', 'best motion picture - drama',
+                            'best performance by an actress in a motion picture - drama',
+                            'best performance by an actor in a motion picture - drama',
+                            'best motion picture - comedy or musical',
+                            'best performance by an actress in a motion picture - comedy or musical',
+                            'best performance by an actor in a motion picture - comedy or musical',
+                            'best animated feature film', 'best foreign language film',
+                            'best performance by an actress in a supporting role in a motion picture',
+                            'best performance by an actor in a supporting role in a motion picture',
+                            'best director - motion picture', 'best screenplay - motion picture',
+                            'best original score - motion picture', 'best original song - motion picture',
+                            'best television series - drama',
+                            'best performance by an actress in a television series - drama',
+                            'best performance by an actor in a television series - drama',
+                            'best television series - comedy or musical',
+                            'best performance by an actress in a television series - comedy or musical',
+                            'best performance by an actor in a television series - comedy or musical',
+                            'best mini-series or motion picture made for television',
+                            'best performance by an actress in a mini-series or motion picture made for television',
+                            'best performance by an actor in a mini-series or motion picture made for television',
+                            'best performance by an actress in a supporting role in a series, mini-series or motion picture made for television',
+                            'best performance by an actor in a supporting role in a series, mini-series or motion picture made for television']
+
+    tweet_extraction(2013, OFFICIAL_AWARDS_1315)

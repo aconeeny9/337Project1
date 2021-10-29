@@ -2,17 +2,6 @@ import json
 import re
 
 
-def load_data(path):
-    tweets = []
-    with open(path, 'r', encoding = 'utf-8') as data_file:
-        data = json.load(data_file)
-    for info in data:
-        # if you want to add any pre-processing
-        # please add it here
-        tweets.append(info['text'])
-    return tweets
-
-
 def keyword_matcher(keywords, tweet):
     clean_tweet = re.sub('\'s', '', tweet)
     clean_tweet = re.sub(r'[^\w\s]', '', clean_tweet)

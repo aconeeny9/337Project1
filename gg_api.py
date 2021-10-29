@@ -40,8 +40,7 @@ def get_winner(year):
     names as keys, and each entry containing a single string.
     Do NOT change the name of this function or what it returns.'''
     # Your code here
-    fres = get_answers(year)
-    winners = {award: fres['award_data'][award]['winner'] for award in OFFICIAL_AWARDS_1315}
+    winners = extraction.get_winner()
     return winners
 
 def get_presenters(year):
@@ -59,7 +58,8 @@ def pre_ceremony(year):
     plain text file. It is the first thing the TA will run when grading.
     Do NOT change the name of this function or what it returns.'''
     # Your code here
-    extraction.tweet_extraction(year)
+    print(year)
+    extraction.tweet_extraction(int(year), OFFICIAL_AWARDS_1315)
     print("Pre-ceremony processing complete.")
     return
 
