@@ -69,7 +69,6 @@ def tweet_extraction(year, award_list):
     winner_scanner.evaluate()
     nominees_scanner.evaluate(data, award_list)
     presenter_scanner.set_winners(winner_scanner.winner)
-    presenter_scanner.set_hosts(host_scanner.host_name)
     presenter_scanner.evaluate()
     print(host_scanner.to_string())
     util.write_json([host_scanner], 'gg2013.json')

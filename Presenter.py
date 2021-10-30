@@ -16,9 +16,6 @@ class Presenter:
 
     def set_winners(self, winner_list):
         self.winner_dict = winner_list
-
-    def set_hosts(self, hosts):
-        self.hosts = hosts
     
     def scanner_dispatch(self, match_dic, tweet):
         for match_key in match_dic:
@@ -71,25 +68,19 @@ class Presenter:
 
     def evaluate(self):
         for candidate in self.presenter_collect:
-            isHost = False
-            for host in self.hosts:
-                if candidate.lower() in host.lower():
-                    isHost = True
-                    break
-            if isHost == False:
-                for i in self.winner_dict:
-                    winner = self.winner_dict[i]
-                    if winner in candidate[1].lower() and candidate[0].lower() not in winner:
-                        if candidate[0] in self.presenter_dic:
-                            self.presenter_dic[candidate[0]] += winner
-                        else:
-                            self.presenter_dic[candidate[0]] = winner
-                for award in self.awards_list:
-                    if award in candidate[1].lower() and candidate[0].lower() not in award and candidate[0].lower() not in self.winner_dict[award]:
-                        if candidate[0] in self.presenter_dic:
-                            self.presenter_dic[candidate[0]] += award
-                        else:
-                            self.presenter_dic[candidate[0]] = award
+            for i in self.winner_dict:
+                winner = self.winner_dict[i]
+                if winner in candidate[1].lower() and candidate[0].lower() not in winner:
+                    if candidate[0] in self.presenter_dic:
+                        self.presenter_dic[candidate[0]] += winner
+                    else:
+                        self.presenter_dic[candidate[0]] = winner
+            for award in self.awards_list:
+                if award in candidate[1].lower() and candidate[0].lower() not in award and candidate[0].lower() not in self.winner_dict[award]:
+                    if candidate[0] in self.presenter_dic:
+                        self.presenter_dic[candidate[0]] += award
+                    else:
+                        self.presenter_dic[candidate[0]] = award
 
         for key in self.awards_list:
             options = {}
