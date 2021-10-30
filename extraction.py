@@ -4,6 +4,7 @@ import util
 from Host import Host
 from Awards_temp import Awards
 from Winner import Winner
+from nominees_to_awards import Nominees
 import imdb_checker
 import json
 
@@ -25,6 +26,7 @@ whitelist_keywords = [
 host_scanner = Host()
 awards_scanner = Awards()
 winner_scanner = Winner()
+nominees_scanner = Nominees()
 
 
 def tweet_extraction(year, award_list):
@@ -61,6 +63,7 @@ def tweet_extraction(year, award_list):
     host_scanner.evaluate()
     awards_scanner.evaluate()
     winner_scanner.evaluate()
+    nominees_scanner.evaluate(data,award_list)
     print(host_scanner.to_string())
     util.write_json([host_scanner], 'gg2013.json')
 
@@ -75,6 +78,9 @@ def get_award():
 
 def get_winner():
     return winner_scanner.winner
+
+def get_nominees():
+    return nominees_scanner.nominees
 
 
 if __name__ == '__main__':
