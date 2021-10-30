@@ -23,7 +23,7 @@ class Presenter:
                 self.__search_presenter(match_dic[match_key], tweet)
 
     def __search_presenter(self, indexes, tweet):
-        clean_tweet = re.sub('\'s', '', tweet['text'])
+        clean_tweet = re.sub('\'s', '', tweet)
         clean_tweet = re.sub(r'[^\w\s]', '', clean_tweet)
         split_string = clean_tweet.split()
         
@@ -32,13 +32,14 @@ class Presenter:
             search_backward = util.search_backward(split_string, start, 5)
             search_backward.extend(util.new_search_backward(split_string, start))
             search_forward = util.search_forward(split_string, end, 5)
-            search_forward.extend(util.new_search_forward(split_string, index))
-            candidate_list = search_backward.extend(search_forward)
+            search_forward.extend(util.new_search_forward(split_string, end))
+            search_backward.extend(search_forward)
+            candidate_list = search_backward
             for candidate in candidate_list:
                 if imdb.is_imdb_person(candidate):
                     self.presenter_collect.append([candidate, tweet])
     
-    def __simplify_dict(dictionary):
+    def __simplify_dict(self, dictionary):
         for person in dictionary:
             for x in dictionary:
                 if x in person and x != person and dictionary[x] != -1 and dictionary[person] != -1:
@@ -70,16 +71,16 @@ class Presenter:
             for i in self.winner_dict:
                 winner = self.winner_dict[i]
                 if winner in candidate[1].lower() and candidate[0].lower() not in winner:
-                    if candidate in self.presenter_dic:
-                        self.presenter_dic[candidate] += winner
+                    if candidate[0] in self.presenter_dic:
+                        self.presenter_dic[candidate[0]] += winner
                     else:
-                        self.presenter_dic[candidate] = winner
+                        self.presenter_dic[candidate[0]] = winner
             for award in self.awards_list:
-                if award in candidate[1].lower() and candidate[0].lower() not in award and candidate[0].lower() not in self.winner_list[award]:
-                    if candidate in self.presenter_dic:
-                        self.presenter_dic[candidate] += award
+                if award in candidate[1].lower() and candidate[0].lower() not in award and candidate[0].lower() not in self.winner_dict[award]:
+                    if candidate[0] in self.presenter_dic:
+                        self.presenter_dic[candidate[0]] += award
                     else:
-                        self.presenter_dic[candidate] = award
+                        self.presenter_dic[candidate[0]] = award
 
         for key in self.awards_list:
             options = {}
