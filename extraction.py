@@ -1,3 +1,5 @@
+import string
+
 import util
 from Host import Host
 from Awards_temp import Awards
@@ -18,8 +20,7 @@ whitelist_keywords = [
     ["win", ['wins']],
     ['winner', ['winner']],
     ['go to', ['goes to']],
-    ['nominate', ["nominate", "nominee"]],
-    ['cecil', ['Cecil B']]
+    ['nominate', ["nominate", "nominee"]]
 ]
 host_scanner = Host()
 awards_scanner = Awards()
@@ -29,6 +30,15 @@ winner_scanner = Winner()
 def tweet_extraction(year, award_list):
     imdb_checker.load_dataset(year)
     winner_scanner.set_awards(award_list)
+    addition = ['cecil', []]
+    for award in award_list:
+        if award.split()[0].lower() != 'best':
+            word1 = award.split()[0]
+            word2 = award.split()[1]
+            word1 = word1[0].upper()+word1[1:]
+            word2 = word2[0].upper()+word2[1:]
+            addition[1].append(' '.join([word1, word2]).strip(string.punctuation))
+    whitelist_keywords.append(addition)
     # load tweet from csv
     path = 'gg{}.json'.format(year)
     with open(path, 'r', encoding='utf-8') as data_file:

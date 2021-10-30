@@ -56,17 +56,8 @@ class Host:
         person_values = np.array(person_values)
         sorted_index = np.argsort(person_values)[::-1]
         person = person[sorted_index]
-        person_values = person_values[sorted_index]
-        person_values = person_values.tolist()
-        if len(person_values)<=1:
-            self.host_name = person.tolist()
-            return
-        for i in range(1, len(person_values)):
-            count = float(person_values[i])
-            prev_count = float(person_values[i - 1])
-            if (prev_count - count) / prev_count > 0.3:
-                break
-        self.host_name = person[:i].tolist()
+        person = person.tolist()
+        self.host_name = person[:2]
 
     def __merge_count(self, name):
         words = name.split()
