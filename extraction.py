@@ -2,7 +2,7 @@ import string
 
 import util
 from Host import Host
-from Awards_temp import Awards
+from Awards import Awards
 from Winner import Winner
 from nominees_to_awards import Nominees
 from Presenter import Presenter
@@ -19,10 +19,10 @@ blacklist_keywords = [
 whitelist_keywords = [
     ["host", ["host", "hosts", "hosting", "hosted"]],
     ['best', ['Best']],
-    ["win", ['wins']],
+    ["win", ['wins', 'winning']],
     ['winner', ['winner']],
     ['go to', ['goes to']],
-    ['nominate', ["nominate", "nominee"]],
+    ['award', ['is awarded to']],
     ['present', ['present']]
 ]
 host_scanner = Host()

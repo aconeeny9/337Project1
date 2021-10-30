@@ -94,51 +94,51 @@ class Winner:
             if self.__name_matcher(award_name, tweet):
                 return award_name
             else:
-                match = re.search(r'\btelevision\b'.format(award_name), award_name.lower())
+                match = re.search(r'\btelevision\b', award_name.lower())
                 if match:
                     award_name2 = re.sub(r'\btelevision\b', 'tv', award_name.lower())
                     if self.__name_matcher(award_name2, tweet):
                         return award_name
-                match = re.search(r'\bbest performance by an actor in a supporting role\b'.format(award_name),
+                match = re.search(r'\bbest performance by an actor in a supporting role\b',
                                   award_name.lower())
                 if match:
                     award_name2 = re.sub(r'\bbest performance by an actor in a supporting role\b',
                                          'best supporting actor', award_name.lower())
                     if self.__name_matcher(award_name2, tweet):
                         return award_name
-                    match = re.search(r'\btelevision\b'.format(award_name2), award_name2.lower())
+                    match = re.search(r'\btelevision\b', award_name2.lower())
                     if match:
                         award_name3 = re.sub(r'\btelevision\b', 'tv', award_name2.lower())
                         if self.__name_matcher(award_name3, tweet):
                             return award_name
-                match = re.search(r'\bbest performance by an actress in a supporting role\b'.format(award_name),
+                match = re.search(r'\bbest performance by an actress in a supporting role\b',
                                   award_name.lower())
                 if match:
                     award_name2 = re.sub(r'\bbest performance by an actress in a supporting role\b',
                                          'best supporting actress', award_name.lower())
                     if self.__name_matcher(award_name2, tweet):
                         return award_name
-                    match = re.search(r'\btelevision\b'.format(award_name2), award_name2.lower())
+                    match = re.search(r'\btelevision\b', award_name2.lower())
                     if match:
                         award_name3 = re.sub(r'\btelevision\b', 'tv', award_name2.lower())
                         if self.__name_matcher(award_name3, tweet):
                             return award_name
-                match = re.search(r'\bbest performance by an actor\b'.format(award_name), award_name.lower())
+                match = re.search(r'\bbest performance by an actor\b', award_name.lower())
                 if match:
                     award_name2 = re.sub(r'\bbest performance by an actor\b', 'best actor', award_name.lower())
                     if self.__name_matcher(award_name2, tweet):
                         return award_name
-                    match = re.search(r'\btelevision\b'.format(award_name2), award_name2.lower())
+                    match = re.search(r'\btelevision\b', award_name2.lower())
                     if match:
                         award_name3 = re.sub(r'\btelevision\b', 'tv', award_name2.lower())
                         if self.__name_matcher(award_name3, tweet):
                             return award_name
-                match = re.search(r'\bbest performance by an actress\b'.format(award_name), award_name.lower())
+                match = re.search(r'\bbest performance by an actress\b', award_name.lower())
                 if match:
                     award_name2 = re.sub(r'\bbest performance by an actress\b', 'best actress', award_name.lower())
                     if self.__name_matcher(award_name2, tweet):
                         return award_name
-                    match = re.search(r'\btelevision\b'.format(award_name2), award_name2.lower())
+                    match = re.search(r'\btelevision\b', award_name2.lower())
                     if match:
                         award_name3 = re.sub(r'\btelevision\b', 'tv', award_name2.lower())
                         if self.__name_matcher(award_name3, tweet):
