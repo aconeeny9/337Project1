@@ -49,8 +49,7 @@ def get_presenters(year):
     names as keys, and each entry a list of strings. Do NOT change the
     name of this function or what it returns.'''
     # Your code here
-    fres = get_answers(year)
-    presenters = {award: fres['award_data'][award]['presenters'] for award in OFFICIAL_AWARDS_1315}
+    presenters = extraction.get_presenter()
     return presenters
 
 def pre_ceremony(year):
