@@ -71,6 +71,49 @@ def tweet_extraction(year, award_list):
     presenter_scanner.evaluate()
     print(host_scanner.to_string())
     util.write_json([host_scanner], 'gg2013.json')
+        with open('winner.pkl', 'wb') as winner_file:
+        pickle.dump(winner_scanner.winner, winner_file)
+
+
+
+def red_carpet(year):
+    imdb_checker.load_dataset(year)
+    red_carpet_scanner = RedCarpet()
+    keywords = [
+        ["red carpet", ["red carpet", "Red Carpet", "red carpet".upper(), 'redcarpet', 'dress']]]
+    path = 'gg{}.json'.format(year)
+    with open(path, 'r', encoding='utf-8') as data_file:
+        data = json.load(data_file)
+        for index, tweet in enumerate(data):
+            tweet = tweet['text']
+            # check if the tweet contain any good keywords
+            contain_keyword, match_list = util.keyword_matcher(keywords, tweet)
+            if contain_keyword:
+                match_dic = util.merge_matches(match_list)
+                red_carpet_scanner.scanner_dispatch(match_dic, tweet)
+    red_carpet_scanner.evaluate()
+
+
+def surprise(year):
+    imdb_checker.load_dataset(year)
+    surprise_scanner = Surprise()
+    with open('winner.pkl', 'rb') as data_file:
+        winners = pickle.load(data_file)
+    path = 'gg{}.json'.format(year)
+    with open(path, 'r', encoding='utf-8') as data_file:
+        data = json.load(data_file)
+        keywords = []
+        for key in winners:
+            keywords.append([key, [winners[key]], [winners[key].lower()], [winners[key].upper()]])
+        surprise_scanner.set_winner(winners)
+        for index, tweet in enumerate(data):
+            tweet = tweet['text']
+            contain_keyword, match_list = util.keyword_matcher(keywords, tweet)
+            if contain_keyword:
+                match_dic = util.merge_matches(match_list)
+                surprise_scanner.scanner_dispatch_1(match_dic, tweet)
+            surprise_scanner.scanner_dispatch(tweet)
+    surprise_scanner.evaluate()
 
 
 def get_host():
@@ -118,3 +161,5 @@ if __name__ == '__main__':
                             'best performance by an actor in a supporting role in a series, mini-series or motion picture made for television']
 
     tweet_extraction(2013, OFFICIAL_AWARDS_1315)
+    #red_carpet(2013)
+    #surprise(2013)

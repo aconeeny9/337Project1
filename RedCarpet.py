@@ -2,6 +2,7 @@ from textblob import TextBlob
 import spacy
 import re
 import numpy as np
+import imdb_checker
 
 
 class RedCarpet:
@@ -48,7 +49,8 @@ class RedCarpet:
             brand = ''
             link = ''
             for ent in doc.ents:
-                if ent.label_ == 'PERSON':
+                bad_key = ['red carpet', 'Red Carpet', 'red carpet'.upper(), 'redcarpet', 'RedCarpet', 'REDCARPET']
+                if ent.label_ == 'PERSON' and not any([k in ent.text for k in bad_key]) and imdb_checker.is_imdb_person(ent.text):
                     p = ent.text
                     people.append(p)
                 if ent.label_ == 'ORG':
@@ -63,16 +65,16 @@ class RedCarpet:
             structure[4] = link
             for p in people:
                 p = re.sub('\'s', '', p)
-                if p not in self.best_dress:
-                    self.best_dress[p] = structure
+                if p.lower() not in self.best_dress:
+                    self.best_dress[p.lower()] = structure
                 else:
-                    self.best_dress[p][0] += structure[0]
-                    self.best_dress[p][1] += structure[1]
-                    self.best_dress[p][2] += structure[2]
+                    self.best_dress[p.lower()][0] += structure[0]
+                    self.best_dress[p.lower()][1] += structure[1]
+                    self.best_dress[p.lower()][2] += structure[2]
                     if len(structure[3])>0:
-                        self.best_dress[p][3] = structure[3]
+                        self.best_dress[p.lower()][3] = structure[3]
                     if len(structure[4]) > 0:
-                        self.best_dress[p][4] = structure[4]
+                        self.best_dress[p.lower()][4] = structure[4]
 
     def evaluate(self):
         names = []
@@ -120,7 +122,7 @@ class RedCarpet:
         else:
             l = ''
         print(s + ' ' + o + ' ' + l)
-        sort_index = np.argsort(avg)
+        sort_index = np.argsort(total)
         sum = sum[sort_index]
         diff = diff[sort_index]
         avg = avg[sort_index]
