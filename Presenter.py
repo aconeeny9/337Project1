@@ -98,9 +98,9 @@ class Presenter:
                         options[presenter] += self.presenter_dic[presenter].count(key)
                     else:
                         options[presenter] = self.presenter_dic[presenter].count(key)
-                if(self.winner_dict[key] in self.presenter_dic[presenter]):
+                if(self.winner_dict[key].lower() in self.presenter_dic[presenter]):
                     if presenter in options:
-                        options[presenter] += self.presenter_dic[presenter].count(self.winner_dict[key])
+                        options[presenter] += self.presenter_dic[presenter].count(self.winner_dict[key].lower())
                     else:
-                        options[presenter] = self.presenter_dic[presenter].count(self.winner_dict[key])
+                        options[presenter] = self.presenter_dic[presenter].count(self.winner_dict[key].lower())
             self.presenter[key] = self.__get_presenters(options)

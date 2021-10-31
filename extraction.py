@@ -8,6 +8,9 @@ from nominees_to_awards import Nominees
 from Presenter import Presenter
 import imdb_checker
 import json
+import pickle
+from RedCarpet import RedCarpet
+from Surprise import Surprise
 
 # please add any bad keywords here
 blacklist_keywords = [
@@ -71,7 +74,7 @@ def tweet_extraction(year, award_list):
     presenter_scanner.evaluate()
     print(host_scanner.to_string())
     util.write_json([host_scanner], 'gg2013.json')
-        with open('winner.pkl', 'wb') as winner_file:
+    with open('winner.pkl', 'wb') as winner_file:
         pickle.dump(winner_scanner.winner, winner_file)
 
 
