@@ -6,22 +6,24 @@ import re
 
 
 def suitable_candidate(award_name, candidate):
+    if "golden" in candidate.lower() or "globe" in candidate.lower():
+        return False
     if award_name.split()[0].lower() != 'best':
         return any([imdb_checker.is_imdb_actor(candidate), imdb_checker.is_imdb_actress(candidate),
                     imdb_checker.is_imdb_director(candidate)])
     elif 'actor' in award_name:
-        return imdb_checker.is_imdb_actor(candidate)
+        return (imdb_checker.is_imdb_actor(candidate) and len(candidate.split())>1)
     elif 'actress' in award_name:
-        return imdb_checker.is_imdb_actress(candidate)
+        return (imdb_checker.is_imdb_actress(candidate) and len(candidate.split())>1)
     elif 'director' in award_name:
-        return imdb_checker.is_imdb_director(candidate)
+        return (imdb_checker.is_imdb_director(candidate) and len(candidate.split())>1)
     else:
         return imdb_checker.is_imdb_title(candidate)
 
 
 def okay_candidate(award_name, candidate):
     if 'actor' in award_name or 'actress' in award_name or 'director' in award_name:
-        return imdb_checker.is_imdb_person(candidate)
+        return (imdb_checker.is_imdb_person(candidate) and len(candidate.split())>1)
 
 
 class Nominees:
