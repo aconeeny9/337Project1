@@ -1,6 +1,7 @@
 import util
 import imdb_checker as imdb
 import re
+import numpy
 
 class Presenter:
     def __init__(self):
@@ -17,27 +18,31 @@ class Presenter:
     def set_winners(self, winner_list):
         self.winner_dict = winner_list
     
-    def scanner_dispatch(self, match_dic, tweet):
-        for match_key in match_dic:
-            if match_key == "present":
-                self.__search_presenter(match_dic[match_key], tweet)
+    def scanner_dispatch(self, tweet):
+        if 'present' in tweet.lower():
+            self.__search_presenter(tweet)
 
-    def __search_presenter(self, indexes, tweet):
+    def __search_presenter(self, tweet):
         clean_tweet = re.sub('\'s', '', tweet)
         clean_tweet = re.sub(r'[^\w\s]', '', clean_tweet)
         split_string = clean_tweet.split()
         
-        for index in indexes:
-            start, end = index
-            search_backward = util.search_backward(split_string, start, 5)
-            search_backward.extend(util.new_search_backward(split_string, start))
-            search_forward = util.search_forward(split_string, end, 5)
-            search_forward.extend(util.new_search_forward(split_string, end))
-            search_backward.extend(search_forward)
-            candidate_list = search_backward
-            for candidate in candidate_list:
-                if imdb.is_imdb_person(candidate):
-                    self.presenter_collect.append([candidate, tweet])
+        index = -1
+        for ind, c in enumerate(split_string):
+            if "present" in c.lower():
+                index = ind
+                break
+        if index == -1:
+            return
+
+        search_backward = util.search_backward(split_string, index, 5)
+        search_backward.extend(util.new_search_backward(split_string, index))
+        search_forward = util.search_forward(split_string, index, 5)
+        search_forward.extend(util.new_search_forward(split_string, index))
+        search_backward.extend(search_forward)
+        for candidate in search_backward:
+            if imdb.is_imdb_person(candidate):
+                self.presenter_collect.append([candidate, tweet])
     
     def __simplify_dict(self, dictionary):
         for person in dictionary:
@@ -61,15 +66,18 @@ class Presenter:
             return []
         one = d[0][0]
         if len(d) <= 1:
-            return [one, ""]
+            return [one]
         two = d[1][0]
 
-        return [one, two]
+        if (numpy.floor(d[0][1] / 2) - 1) > d[1][1]:
+            return [one]
+        else:
+            return [one, two]
 
     def evaluate(self):
         for candidate in self.presenter_collect:
             for i in self.winner_dict:
-                winner = self.winner_dict[i]
+                winner = self.winner_dict[i].lower()
                 if winner in candidate[1].lower() and candidate[0].lower() not in winner:
                     if candidate[0] in self.presenter_dic:
                         self.presenter_dic[candidate[0]] += winner

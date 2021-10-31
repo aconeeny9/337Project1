@@ -22,8 +22,7 @@ whitelist_keywords = [
     ["win", ['wins', 'winning']],
     ['winner', ['winner']],
     ['go to', ['goes to']],
-    ['award', ['is awarded to']],
-    ['present', ['present']]
+    ['award', ['is awarded to']]
 ]
 host_scanner = Host()
 awards_scanner = Awards()
@@ -63,7 +62,7 @@ def tweet_extraction(year, award_list):
                 host_scanner.scanner_dispatch(match_dic, tweet)
                 awards_scanner.scanner_dispatch(match_dic, tweet)
                 winner_scanner.scanner_dispatch(match_dic, tweet)
-                presenter_scanner.scanner_dispatch(match_dic, tweet)
+            presenter_scanner.scanner_dispatch(tweet)
     host_scanner.evaluate()
     awards_scanner.evaluate()
     winner_scanner.evaluate()
