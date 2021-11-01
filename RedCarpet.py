@@ -9,7 +9,7 @@ class RedCarpet:
     def __init__(self):
         self.best_dress = {}
         self.person = {}
-        self.nlp = spacy.load("en_core_web_trf")
+        self.nlp = spacy.load("en_core_web_sm")
         self.brand = {"Louis": "Louis Vuitton", 'Gucci': 'Gucci', 'Balenciaga': 'Balenciaga', 'Dior': 'Christian Dior',
                       'Prada': 'Prada',
                       'Ferragamo': 'Salvatore Ferragamo', 'Fendi': 'Fendi', 'YSL': 'Yves Saint Laurent',

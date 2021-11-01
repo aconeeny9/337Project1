@@ -27,7 +27,7 @@ def okay_candidate(award_name, candidate):
 class Surprise:
     def __init__(self):
         self.tweet = {}
-        self.nlp = spacy.load("en_core_web_trf")
+        self.nlp = spacy.load("en_core_web_sm")
         self.candidate_dic = {}
 
     def set_winner(self, winner_dic):
