@@ -4,7 +4,7 @@ import util
 from Host import Host
 from Awards import Awards
 from Winner import Winner
-from nominees_to_awards import Nominees
+from Nominees import Nominees
 from Presenter import Presenter
 import imdb_checker
 import json
@@ -48,13 +48,13 @@ def tweet_extraction(year, award_list):
     whitelist_keywords.append(addition)
     # load tweet from csv
     path = 'gg{}.json'.format(year)
+    tweets = []
     with open(path, 'r', encoding='utf-8') as data_file:
         data = json.load(data_file)
         # iterate through all the tweets and extract information from them
         for index, tweet in enumerate(data):
-            #if index % 10000 == 0:
-                #print(index)
             tweet = tweet['text']
+            tweets.append(tweet)
             # check if the tweet contain any bad keywords
             if util.keyword_matcher(blacklist_keywords, tweet)[0]:
                 continue
@@ -69,11 +69,29 @@ def tweet_extraction(year, award_list):
     host_scanner.evaluate()
     awards_scanner.evaluate()
     winner_scanner.evaluate()
-    nominees_scanner.evaluate(data, award_list)
+    winners = winner_scanner.winner
+    nominees_scanner.set_winner(winners)
+    keywords = []
+    for key in winners:
+        keywords.append([key, [winners[key]], [winners[key].lower()], [winners[key].upper()]])
+    nominees_scanner.set_awards(award_list)
+    for tweet in tweets:
+        contain_keyword, match_list = util.keyword_matcher(keywords, tweet)
+        if contain_keyword:
+            match_dic = util.merge_matches(match_list)
+            nominees_scanner.scanner_dispatch(match_dic, tweet)
+    nominees_scanner.evaluate()
     presenter_scanner.set_winners(winner_scanner.winner)
     presenter_scanner.evaluate()
     print(host_scanner.to_string())
-    util.write_json([host_scanner], 'gg2013.json')
+    print(awards_scanner.to_string())
+    for award_name in award_list:
+        print("Award: {}".format(award_name))
+        print('Presenters: {}'.format(presenter_scanner.to_string(award_name)))
+        print('Nominees: {}'.format(nominees_scanner.to_string(award_name)))
+        print('Winner: {}'.format(winner_scanner.to_string(award_name)))
+        print()
+    util.write_json([host_scanner, awards_scanner, presenter_scanner, nominees_scanner, winner_scanner], year)
     with open('winner.pkl', 'wb') as winner_file:
         pickle.dump(winner_scanner.winner, winner_file)
 

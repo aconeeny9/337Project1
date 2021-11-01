@@ -1,3 +1,5 @@
+import string
+
 import util
 import imdb_checker as imdb
 import re
@@ -104,3 +106,11 @@ class Presenter:
                     else:
                         options[presenter] = self.presenter_dic[presenter].count(self.winner_dict[key].lower())
             self.presenter[key] = self.__get_presenters(options)
+
+    def to_string(self, award_name):
+        s = ''
+        for p in self.presenter[award_name]:
+            s = s+p+', '
+        s = s.strip()
+        s = s.strip(string.punctuation)
+        return s.strip()

@@ -182,3 +182,6 @@ class Winner:
                     if not re.match(r'^[_\W]+$', candidate):
                         break
                 self.winner[key] = candidate
+
+    def to_string(self, award_name):
+        return self.winner[award_name]

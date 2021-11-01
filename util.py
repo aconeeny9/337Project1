@@ -93,11 +93,18 @@ def new_search_backward(data, starting_index, inclusive = False):
     return fragments
 
 
-def write_json(data_objects, dataset_name):
-    json_data = {}
-    for data_object in data_objects:
-        data_object.to_json(json_data)
-    words = dataset_name.split('.')
-    file_name = '.'.join(words[:-1])+'answer.json'
+def write_json(data_objects, year):
+    host, awards, presenter, nominees, winner = data_objects
+    json_data = {'Host':host.host_name}
+    json_data['Extracted Awards'] = awards.awards_list
+    for award_name in winner.winner:
+        json_data[award_name] = {
+            "Presenters": presenter.presenter[award_name],
+
+            "Nominees": nominees.nominees[award_name],
+
+            "Winner": winner.winner[award_name]
+        }
+    file_name = 'gg'+str(int(year))+"extraction.json"
     with open(file_name, 'w', encoding='utf-8') as json_file:
         json.dump(json_data, json_file)

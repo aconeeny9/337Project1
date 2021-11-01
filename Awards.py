@@ -195,3 +195,15 @@ class Awards:
         if match:
             result = re.sub(r'\bbest actress\b', 'best performance by an actress', key)
             return result
+
+    def to_string(self):
+        s = "\nExtracted awards names:\n"
+        for award in self.awards_list:
+            s  = s+award+'\n'
+        return s
+
+    def to_json(self, json_dic):
+        if len(self.host_name) > 1:
+            json_dic['Hosts'] = self.host_name
+        else:
+            json_dic['Host'] = self.host_name
